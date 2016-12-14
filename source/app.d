@@ -1,5 +1,9 @@
+import std.algorithm;
 import std.conv;
+import std.format;
 import std.json;
+import std.range;
+import std.stdio;
 import std.string;
 
 import vibe.d;
@@ -36,7 +40,7 @@ class WebInterface
 
 	void getInfo(HTTPServerRequest req, HTTPServerResponse res) 
 	{
-		auto json = Info("kq", "http://192.168.2.2:8080/static/kq.png", "kq's bot", "TankBlaster");
+		auto json = Info("kq", "http://10.254.239.16:8080/static/kq.png", "kq's bot", "TankBlaster");
 		res.writeJsonBody(json);
 	}
 
@@ -44,8 +48,7 @@ class WebInterface
 	void postPerformNextMove(HTTPServerRequest req, HTTPServerResponse res) 
 	{
 		import make_move;
-		try{ make_move.make_move(fromJSON!BattlefieldInfo(parseJSON(req.json.to!string))); }
-		catch(Exception e) { logInfo(e.to!string); }
-		res.writeJsonBody(req.form["input"]);
+		auto m = make_move.make_move(fromJSON!BattlefieldInfo(parseJSON(req.json.to!string)));
+		res.writeJsonBody(m);
 	}
 }
