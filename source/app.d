@@ -1,5 +1,9 @@
-import vibe.d;
+import std.conv;
 import std.json;
+import std.string;
+
+import vibe.d;
+
 import painlessjson;
 
 
@@ -25,15 +29,23 @@ shared static this()
 class WebInterface
 {
 	struct Info{ string Name, AvatarUrl, Description, GameType; };
+
+	//struct 
 	
+	void get(HTTPServerRequest req, HTTPServerResponse res){ res.writeBody(""); }
+
 	void getInfo(HTTPServerRequest req, HTTPServerResponse res) 
 	{
-		auto json = Info("kq", "/static/kq.png", "kq's bot", "TankBlaster");
+		auto json = Info("kq", "http://192.168.2.2:8080/static/kq.png", "kq's bot", "TankBlaster");
 		res.writeJsonBody(json);
 	}
 
-	void postperformNextMove(HTTPServerRequest req, HTTPServerResponse res) 
+	@path("/PerformNextMove")
+	void postPerformNextMove(HTTPServerRequest req, HTTPServerResponse res) 
 	{
-
+		import make_move;
+		try{ make_move.make_move(fromJSON!BattlefieldInfo(parseJSON(req.json.to!string))); }
+		catch(Exception e) { logInfo(e.to!string); }
+		res.writeJsonBody(req.form["input"]);
 	}
 }
