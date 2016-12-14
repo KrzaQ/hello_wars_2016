@@ -1,0 +1,16 @@
+{
+	"authors": [
+		"krzaq"
+	],
+	"name": "hw",
+	"license": "mit",
+	"copyright": "Copyright © 2016, krzaq",
+	"description": "kq's hw entry",
+	"dependencies": {
+		"vibe-d": "~>0.7.28",
+		"painlessjson": "*"
+	},
+	"versions": [
+		"VibeDefaultMain"
+	]
+}
